@@ -21,7 +21,7 @@ setup(
     author='Mike Mackintosh',
     author_email='mike@shutterstock.com',
     license='MIT',
-    url='https://github.com/ctznOSX',
+    url='http://ctznOSX.com',
     packages=['ctznosx'],
     data_files=[('/etc', ['ctznosx.conf']), ('/var/lib/ctznosx/', ['ctznosx.db']), ('/var/lib/ctznosx/monitors/', ['monitors/README.md'])],
     package_data={'ctznosx': ['data/*/*']},
