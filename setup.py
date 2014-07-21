@@ -23,7 +23,7 @@ setup(
     license='MIT',
     url='https://github.com/ctznOSX',
     packages=['ctznosx'],
-    data_files=[('/etc', ['ctznosx.conf'])],
+    data_files=[('/etc', ['ctznosx.conf']), ('/var/lib/ctznosx/', ['ctznosx.db']), ('/var/lib/ctznosx/monitors/', ['monitors/README.md'])],
     package_data={'ctznosx': ['data/*/*']},
     scripts=['scripts/ctznosx', 'scripts/ctznosx-watcher'],
     install_requires=install_requires,
