@@ -1,0 +1,7 @@
+#!/usr/bin/python
+from ctznosx import cli
+
+try:
+    cli.main()
+except KeyboardInterrupt:
+    pass

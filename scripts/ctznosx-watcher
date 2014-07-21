@@ -1,0 +1,7 @@
+#!/usr/bin/python
+from ctznosx import watcher
+
+try:
+    watcher.main()
+except KeyboardInterrupt:
+    pass
