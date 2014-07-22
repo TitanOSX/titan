@@ -20,7 +20,7 @@ CTZNOSX_CONFIG = join('/etc/', 'ctznosx.conf')
 CONFIG = ctznConfig( CTZNOSX_CONFIG, CTZNOSX_PATH )
 
 # Set monitor path from Config
-MONITOR_PATH = CONFIG['main']['datastore']
+MONITOR_PATH = CONFIG['main']['monitorstore']
 
 """ Install """
 # TODO: Install checksum check on package
