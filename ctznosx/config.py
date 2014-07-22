@@ -15,7 +15,7 @@ def TiConfig( config_file, ctznosxpath ):
             'debug': False, 
             'datastore': join(ctznosxpath,'ctznosx.db'),
             'logstore': join(ctznosxpath,'logs'),
-            'modulestore': join(ctznosxpath, "monitors"),
+            'monitorstore': join(ctznosxpath, "monitors"),
             'reportstore': join(ctznosxpath, "reports")
             }, 
         'reporting': {
