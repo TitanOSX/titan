@@ -33,6 +33,7 @@ dseditgroup -o edit -a _ctznosx -t user wheel"""
         print "Updating permissions for ctznOSX"
         shell_out("chown -R _ctznosx /var/lib/ctznosx")
         shell_out("chgrp -R wheel /var/lib/ctznosx")
+        shell_out("chmod -R 0633 wheel /var/lib/ctznosx/logs")
 
     def run(self):
 
