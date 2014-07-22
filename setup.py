@@ -31,7 +31,8 @@ dseditgroup -o edit -a _ctznosx -t user wheel"""
     def postinstall(self):
         # Post install script
         print "Updating permissions for ctznOSX"
-        shell_out("chown -R _ctznosx:_ctznosx /var/lib/ctznosx")
+        shell_out("chown -R _ctznosx /var/lib/ctznosx")
+        shell_out("chgrp -R wheel /var/lib/ctznosx")
 
     def run(self):
 
