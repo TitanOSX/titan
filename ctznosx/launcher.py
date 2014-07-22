@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 """
-This is the launcher for Titan
+This is the launcher for ctznOSX/Titan
 """
 
 import logging
 from sys import argv,exit
 from itertools import chain
-from config import TiConfig
+from config import TiConfig as ctznConfig
 from titantools.system import hw_serial as get_device_serial
 from socket import gethostname
 from time import time, strftime, gmtime
@@ -15,31 +15,27 @@ from subprocess import Popen, PIPE
 from os import listdir,walk,path,environ
 from os.path import dirname, realpath, isfile, join, splitext, basename
 
-# Types
-TiLanguage = namedtuple("TiLanguage", "supported_extensions execution_string")
+# Get ctznOSX Env and Config
+CTZNOSX_PATH = (environ.get('CTZNOSX_PATH') or '/var/lib/ctznosx/')
+CTZNOSX_CONFIG = join('/etc/', 'ctznosx.conf')
+
+# Config
+CONFIG = ctznConfig( CTZNOSX_CONFIG, CTZNOSX_PATH )
 
 # Configurations
 logging.basicConfig(format='%(message)s', level=logging.INFO)
-
-# Get Titan Env and Config
-TITAN_PATH = (environ.get('TITAN_PATH') or '/var/lib/ctznosx/')
-TITAN_CONFIG = join(TITAN_PATH, 'titan.conf')
-
-# Config
-CONFIG = TiConfig( TITAN_CONFIG )
 
 # Constants
 CURRENT_DIR = dirname(realpath(__file__))
 
 # Base Modules Dir
-MODULES_DIR = CONFIG['main']['modulestore']
+MODULES_DIR = CONFIG['main']['monitorstore']
 
 # Log Directory
 LOG_DIR = CONFIG['main']['logstore']
 
 # Log Directory
-DATASTORE_DIR = CONFIG['main']['datastore']
-DATASTORE = join(CONFIG['main']['datastore'], "titan.sqlite")
+DATASTORE = CONFIG['main']['datastore']
 
 # Report Directory
 REPORT_DIR = CONFIG['main']['reportstore']
@@ -65,28 +61,30 @@ for path in MODULE_PACKS:
         for f in (f for f in files if f not in [".gitkeep", "README", "schema.py", "config.json"]):
             MODULES.append( join(root,f) )
 
+# Types
+CtznLanguage = namedtuple("CtznLanguage", "supported_extensions execution_string")
 
-PYTHON_LANGUAGE = TiLanguage(
+PYTHON_LANGUAGE = CtznLanguage(
     supported_extensions = [".py", ".pyc"],
     execution_string = "python",
 )
 
-RUBY_LANGUAGE = TiLanguage(
+RUBY_LANGUAGE = CtznLanguage(
     supported_extensions = [".rb"],
     execution_string = "ruby"
 )
 
-BASH_LANGUAGE = TiLanguage(
+BASH_LANGUAGE = CtznLanguage(
     supported_extensions = [".bash", ".sh"],
     execution_string = "/bin/bash"
 )
 
-PHP_LANGUAGE = TiLanguage(
+PHP_LANGUAGE = CtznLanguage(
     supported_extensions = [".php"],
     execution_string = "php"
 )
 
-PERL_LANGUAGE = TiLanguage(
+PERL_LANGUAGE = CtznLanguage(
     supported_extensions = [".pl"],
     execution_string = "perl"
 )
@@ -101,6 +99,9 @@ SUPPORTED_LANGUAGES = [
 
 # Set Debugging
 testing_enabled = False
+
+if "--test" in argv[1:]:
+    testing_enabled = True
 
 # Functions
 def log_line(log_name, line):
@@ -123,11 +124,14 @@ def spawn_module(module, current_lang, mod_name):
         logging_passthru = ''
 
     command = list(chain(
+        "/usr/bin/sudo -u _ctznosx".split(" "),
         current_lang.execution_string.split(" "),
         [module],
         [DATASTORE],
         [logging_passthru]
     ))
+    
+    print command
 
     execution = Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE)
     stdout = execution.stdout.readlines()
@@ -159,17 +163,14 @@ def launch_modules():
                 current_lang = language
                 break
 
-        if current_lang is not None and isinstance(current_lang, TiLanguage):
+        if current_lang is not None and isinstance(current_lang, CtznLanguage):
             if testing_enabled:
-                print log_line("titan-core", "Found Module: %s/%s, Lang: %s" % (basename(dirname(module)),mod_name, current_lang.execution_string))
+                print log_line("ctznOSX", "Found Module: %s/%s, Lang: %s" % (basename(dirname(module)),mod_name, current_lang.execution_string))
             
             spawn_module(module, current_lang, mod_name)
 
-# Main Python Instructions
-if __name__ == "__main__":
-    if "--test" in argv[1:]:
-        testing_enabled = True
-
+# Default run method
+def run():
     # Record Start Time
     start = time()
 
@@ -178,4 +179,8 @@ if __name__ == "__main__":
 
     # Record End Time
     end = time()
-    logging.info("Execution took %s seconds.", str(end - start))
+    logging.info("Execution took %s seconds.", str(round(end - start, 4)))   
+
+# For Mother Import
+if __name__ == "__main__":
+    run()
