@@ -124,7 +124,7 @@ def spawn_module(module, current_lang, mod_name):
         logging_passthru = ''
 
     command = list(chain(
-        "/usr/bin/sudo -u _ctznosx".split(" "),
+        ["/usr/bin/sudo"], #/usr/bin/sudo -u _ctznosx
         current_lang.execution_string.split(" "),
         [module],
         [DATASTORE],
