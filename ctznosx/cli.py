@@ -2,12 +2,20 @@ from __future__ import unicode_literals
 
 import argparse
 import locale
-import os, sys
+import sys
+from os import listdir,walk,path,environ
 from ctznosx import __version__, monitors
 from ctznosx.exceptions import Error
 from ctznosx.usage import *
-#from ctznosx import launcher
+from ctznosx import launcher
+from config import TiConfig as ctznConfig
 
+# Get ctznOSX Env and Config
+CTZNOSX_PATH = (environ.get('CTZNOSX_PATH') or '/var/lib/ctznosx/')
+CTZNOSX_CONFIG = path.join('/etc/', 'ctznosx.conf')
+
+# Config
+CONFIG = ctznConfig( CTZNOSX_CONFIG, CTZNOSX_PATH )
 
 def argument_parser(*args, **kwargs):
     format_usage = kwargs.pop('format_usage', None)
@@ -31,7 +39,7 @@ def argument_parser(*args, **kwargs):
 
 # Handles monitor sub-commands
 def monitor(args):
-    if args[1] in ('list', 'install', 'remove'):
+    if args[1] in ('list', 'install', 'remove', 'upgrade'):
         getattr(monitors, args[1])(args[2:])
     else:
         print MONITOR_USAGE
@@ -88,8 +96,7 @@ def main(argv=None):
 
         # Generic Run Script
         else:
-            pass
-            #launcher(args).run(args.command, argv[pos + 1:])
+            launcher.run()
 
     except Error as error:
         message = '%s' % error
