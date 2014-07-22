@@ -6,30 +6,27 @@ import ConfigParser, inspect
 from os.path import dirname,abspath,join,isfile
 from sys import argv,exit
 
-# Set the titan directory
-TITAN_DIR = dirname(dirname(abspath(inspect.getfile(inspect.currentframe()))))
-
 # Titan Configuration
-def TiConfig( config_file ):
+def TiConfig( config_file, ctznosxpath ):
 
     # Default Configuration
     config = {
         'main': {
-            'debug': 'true', 
-            'datastore': join(TITAN_DIR,'db'),
-            'logstore': join(TITAN_DIR,'logs'),
-            'modulestore': join(TITAN_DIR, "modules"),
-            'reportstore': join(TITAN_DIR, "reports/")
+            'debug': False, 
+            'datastore': join(ctznosxpath,'ctznosx.db'),
+            'logstore': join(ctznosxpath,'logs'),
+            'modulestore': join(ctznosxpath, "monitors"),
+            'reportstore': join(ctznosxpath, "reports")
             }, 
         'reporting': {
-            'type': 'syslog|http', 
+            'type': 'http', 
             'enabled': False, # True or False 
             'target': 'http://localhost:9393/ctznOSX'
             }, 
         'watcher': {
             'enabled': 'true',
-            'timeout': 10,
-            'send_every': 60,
+            'timeout': 3, # Powers of
+            'send_every': 60, 
             }
         }
 
@@ -40,6 +37,6 @@ def TiConfig( config_file ):
             for option in cp.options(section):
                 config[section][option] = cp.get(section, option)
     else:
-        exit('Failed to load ctznOSX configuration')
+        exit('Using default configuration')
 
     return config
