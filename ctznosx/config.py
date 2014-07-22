@@ -37,6 +37,6 @@ def TiConfig( config_file, ctznosxpath ):
             for option in cp.options(section):
                 config[section][option] = cp.get(section, option)
     else:
-        exit('Using default configuration')
+        print '!! NOTICE - Using default configuration'
 
     return config
