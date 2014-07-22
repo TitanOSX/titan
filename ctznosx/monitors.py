@@ -1,14 +1,16 @@
 from __future__ import unicode_literals
 
 import getpass
-from os import walk
+import datetime
+from glob import glob
 from sys import exit
 from shutil import rmtree
-from os.path import isdir,join
+from os import stat
+from os.path import isdir,join,sep
 from titantools.system import shell_out
 import urllib2, urllib, httplib, json
 
-MONITOR_PATH = '/var/lib/ctznosx/'
+MONITOR_PATH = '/var/lib/ctznosx/monitors/'
 
 # TODO: Install checksum check on package
 def install(args):
@@ -56,10 +58,20 @@ def remove(args):
         exit(1)
 
 def list(args):
-    for path, dirs, files in walk(path):
-      print path
-      for f in files:
-        print f
+    monitors = [monitor for monitor in glob( join(MONITOR_PATH,"*") ) if monitor.find('README.md') is -1]
+    for monitor in monitors:
+        stats = stat(monitor)        
+        
+        monitor_name = monitor.rsplit('/', 1)[1]
+        install_date = datetime.datetime.fromtimestamp(
+            int(stats.st_mtime)
+        ).strftime('%d-%b %y @ %H:%M:%S')
+
+        sourced_from = shell_out("git -C %s remote -v" % monitor)
+
+        print "The following ctznOSX monitors are installed:\n"
+        print "{}\n\tInstalled on: {}\n\tSourced From:   {}".format(monitor_name, install_date, sourced_from.replace("\n", "\n\t\t\t"))
+
 
 # Send the request
 def http_get_module( target ):
