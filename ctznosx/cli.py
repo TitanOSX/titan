@@ -29,21 +29,15 @@ def argument_parser(*args, **kwargs):
 
     return p
 
+# Handles monitor sub-commands
+def monitor(args):
+    if args[1] in ('list', 'install', 'remove'):
+        getattr(monitors, args[1])(args[2:])
+    else:
+        print MONITOR_USAGE
+        sys.exit(1)
 
-def project(args):
-    """
-    Create and return project instance using cli arguments.
-    """
-    config = {'path': args.path}
-    if args.verbose:
-        config['verbose'] = True
-    if args.dry_run:
-        config['dry_run'] = True
-        config['verbose'] = True
-    if args.runtime:
-        config['runtime'] = args.runtime
-    return Project(config, env=args.env)
-    
+# Handles clean sub-commands
 def clean(args):
     print args
 
@@ -67,9 +61,6 @@ def main(argv=None):
         if skip_next:
             skip_next = False
             continue
-        elif arg.startswith('--'):
-            if arg[2:] in ('env', 'path', 'runtime'):
-                skip_next = True
         else:
             pos = i
             break
@@ -86,8 +77,8 @@ def main(argv=None):
         args = parser.parse_args(argv[:pos + 1])
         
         # If this is a plugin install/remove
-        if args.command in ('install', 'remove'):
-            getattr(monitors, args.command)(argv[pos + 1:])
+        if args.command in ('monitor'):
+            monitor(argv)
 
         elif args.command in ('clean'):
             clean(args)

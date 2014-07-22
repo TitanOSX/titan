@@ -15,9 +15,17 @@ HELP = _("""
 
 commands:
   run                invoke the scanner
-  install            installs specified plugin
-  remove             removes specified plugin
+  monitor            manage monitors
   clean              clean data store contents
   report             display report
 
+""")
+
+MONITOR_USAGE = _("""
+Usage: ctznosx monitor [ install | list | remove ]
+
+commands:
+  list               show all installed monitors
+  install            installs specified monitor
+  remove             removes specified monitor
 """)
