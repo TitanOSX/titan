@@ -22,10 +22,11 @@ commands:
 """)
 
 MONITOR_USAGE = _("""
-Usage: ctznosx monitor [ install | list | remove ]
+Usage: ctznosx monitor [ install | list | upgrade | remove ]
 
 commands:
   list               show all installed monitors
   install            installs specified monitor
+  upgrade            upgrades specified monitor
   remove             removes specified monitor
 """)
