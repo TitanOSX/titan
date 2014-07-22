@@ -16,10 +16,12 @@ HELP = _("""
 commands:
   run                invoke the scanner
   monitor            manage monitors
-  clean              clean data store contents
   report             display report
 
 """)
+
+# Unused ATM
+#  clean              clean data store contents
 
 MONITOR_USAGE = _("""
 Usage: ctznosx monitor [ install | list | upgrade | remove ]
