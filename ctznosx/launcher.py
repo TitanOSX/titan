@@ -100,7 +100,7 @@ SUPPORTED_LANGUAGES = [
 # Set Debugging
 testing_enabled = False
 
-if "--test" in argv[1:]:
+if "--verbose" in argv[1:]:
     testing_enabled = True
 
 # Functions
