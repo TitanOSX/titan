@@ -85,9 +85,11 @@ def main(argv=None):
         if args.command in ('monitor'):
             monitor(argv)
 
+        # Clean subcommand
         elif args.command in ('clean'):
             clean(args)
 
+        # Report subcommand
         elif args.command in ('report'):
             Report.run()
 
