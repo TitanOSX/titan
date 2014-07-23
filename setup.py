@@ -15,7 +15,9 @@ install_requires = ['titantools']
 if sys.version_info < (2, 7):
     install_requires += ['argparse']
 
+""" ctznOSX Installer Helper """
 class CtznosxInstaller(install):
+    """ Preinstall hooks """
     def preinstall(self):
         # Add custom pre-install stuff
         print "Adding ctznOSX User"
@@ -27,14 +29,17 @@ dscl . -create /Users/_ctznosx UserShell /sbin/nologin
 dseditgroup -o edit -a _ctznosx -t user admin
 dseditgroup -o edit -a _ctznosx -t user wheel"""
         shell_out(add_user_script)
-
+    
+    """ Postinstall hooks """
     def postinstall(self):
         # Post install script
         print "Updating permissions for ctznOSX"
         shell_out("chown -R _ctznosx /var/lib/ctznosx")
         shell_out("chgrp -R wheel /var/lib/ctznosx")
-        shell_out("chmod -R 0633 wheel /var/lib/ctznosx/logs")
+        shell_out("chmod -R 0633 /var/lib/ctznosx/logs")
+        shell_out("chmod -R 0666 /var/lib/ctznosx/ctznosx.db")
 
+    """ Runtime hooks """
     def run(self):
 
         self.preinstall()
