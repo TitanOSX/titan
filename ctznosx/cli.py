@@ -4,7 +4,8 @@ import argparse
 import locale
 import sys
 from os import listdir,walk,path,environ
-from ctznosx import __version__, monitors as Monitors, report as Report
+from ctznosx import __version__, monitors as Monitors
+from ctznosx import report as Report
 from ctznosx.exceptions import Error
 from ctznosx.usage import *
 from ctznosx import launcher
