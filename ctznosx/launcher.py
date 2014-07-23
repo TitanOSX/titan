@@ -131,8 +131,6 @@ def spawn_module(module, current_lang, mod_name):
         [logging_passthru]
     ))
     
-    print command
-
     execution = Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE)
     stdout = execution.stdout.readlines()
     stderr = execution.stderr.readlines()
