@@ -4,7 +4,8 @@ import argparse
 import locale
 import sys
 from os import listdir,walk,path,environ
-from ctznosx import __version__, monitors
+from ctznosx import __version__, monitors as Monitors
+from ctznosx import report as Report
 from ctznosx.exceptions import Error
 from ctznosx.usage import *
 from ctznosx import launcher
@@ -40,16 +41,13 @@ def argument_parser(*args, **kwargs):
 # Handles monitor sub-commands
 def monitor(args):
     if args[1] in ('list', 'install', 'remove', 'upgrade'):
-        getattr(monitors, args[1])(args[2:])
+        getattr(Monitors, args[1])(args[2:])
     else:
         print MONITOR_USAGE
         sys.exit(1)
 
 # Handles clean sub-commands
 def clean(args):
-    print args
-
-def report(args):
     print args
 
 def main(argv=None):
@@ -88,11 +86,13 @@ def main(argv=None):
         if args.command in ('monitor'):
             monitor(argv)
 
+        # Clean subcommand
         elif args.command in ('clean'):
             clean(args)
 
+        # Report subcommand
         elif args.command in ('report'):
-            report(args)
+            Report.run()
 
         # Generic Run Script
         else:
