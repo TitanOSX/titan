@@ -206,7 +206,7 @@ def run():
 
     # Load ORM 
     ORM = ctznORM(DATASTORE)
-    
+
     # Get all tables
     all_monitors = ORM.select('sqlite_master', 'name',  "type = 'table' and name != 'watcher'")
 
@@ -230,6 +230,10 @@ def run():
         report += "<div class=\"block\" id=\"%s\">" % monitor['name']
         report += " <h1 class=\"page-header\">%s</h1>\n" % monitor['name'].replace("_", " ")
         report += " <div class=\"block-details\">"
+
+        if module_data is None:
+            continue            
+
         report += "     <p>We found <b>%d</b> rows</p>" % len(module_data)
         report += " </div>"
         report += " <div class=\"block-content\">"
