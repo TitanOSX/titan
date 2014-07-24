@@ -59,7 +59,8 @@ def upgrade(args):
     # Check if it's already installed
     if does_monitor_exist(args[0]):
         print PREFIX, "Upgrading %s" % args[0]       
-        shell_out("cd %s && sudo git stash && sudo git pull" % join(MONITOR_PATH, args[0]))
+        result = shell_out("cd %s && sudo git stash && sudo git fetch && sudo git diff FETCH_HEAD && sudo git pull -f" % join(MONITOR_PATH, args[0]))
+        print PREFIX, result
         print PREFIX, "Done"     
 
     else:

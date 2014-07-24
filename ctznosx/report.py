@@ -143,9 +143,7 @@ var Zepto=function(){function L(t){return null==t?String(t):j[S.call(t)]||"objec
 
         $('.nav_monitor').on('click',function(e){
             new_main = $('#'+$(this).attr('name'))
-            console.log(new_main)
             $('#main').html( new_main.html() )
-            console.log( $('#main') )
             $('.nav_monitor').parent().removeClass('active')
             $(this).parent().addClass('active')
         })
@@ -206,10 +204,11 @@ def run():
 
     # Load ORM 
     ORM = ctznORM(DATASTORE)
-    
+
     # Get all tables
     all_monitors = ORM.select('sqlite_master', 'name',  "type = 'table' and name != 'watcher'")
-
+    
+    # Starts block-hide
     report += "<div class=\"block-hide\">"
 
     """ Use for Dashboard view """
@@ -227,11 +226,20 @@ def run():
 
         module_data = ORM.select( monitor['name'], '*' )
 
+        # Starts block tag
         report += "<div class=\"block\" id=\"%s\">" % monitor['name']
         report += " <h1 class=\"page-header\">%s</h1>\n" % monitor['name'].replace("_", " ")
         report += " <div class=\"block-details\">"
+
+        if module_data is None:
+            report += "     <p>We found <b>0</b> rows</p>"
+            report += " </div>"
+            report += "</div>"
+            continue            
+
         report += "     <p>We found <b>%d</b> rows</p>" % len(module_data)
         report += " </div>"
+        # Starts block-content
         report += " <div class=\"block-content\">"
         
         for row in module_data:
@@ -261,10 +269,15 @@ def run():
                     report += "\t\t</td>\n"
                     report += "\t</tr>\n"
             report += "</table>\n"
+            report += " </div>"
 
-        report += " </div>"
+        # Completes the block-content    
+        report += "  </div>"
+        
+        # Completes the block tag    
         report += "</div>"
     
+    # Ends block-hide
     report += "</div>"
 
     report += footer()
