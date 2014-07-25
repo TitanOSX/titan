@@ -6,7 +6,7 @@ This is the launcher for ctznOSX/Titan
 import logging
 from sys import argv,exit
 from itertools import chain
-from config import TiConfig as ctznConfig
+from config import ctznConfig
 from titantools.system import hw_serial as get_device_serial
 from socket import gethostname
 from time import time, strftime, gmtime

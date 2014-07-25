@@ -10,7 +10,7 @@ from shutil import rmtree
 from os.path import isdir,join,sep
 from titantools.system import shell_out
 import urllib2, urllib, httplib, json
-from config import TiConfig as ctznConfig
+from config import ctznConfig
 
 # Get ctznOSX Env and Config
 CTZNOSX_PATH = (environ.get('CTZNOSX_PATH') or '/var/lib/ctznosx/')
