@@ -29,9 +29,15 @@ ctznOSX was built to solve one problem; the visibility of device contents. In th
 Installation
 ------------
 ctznOSX at its core is just a Python script. So installation is pretty simple using Python's setuptools:
-    
+
+###From Source:    
+
     git clone https://github.com/ctznosx/cli.git ctznosx
     cd ctznosx && sudo python setup.py install
+
+### From PyPi
+
+    sudo pip install titantools ctznosx
 
 Configuration
 -------------
