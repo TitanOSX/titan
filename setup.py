@@ -21,7 +21,8 @@ class CtznosxInstaller(install):
     def preinstall(self):
         # Add custom pre-install stuff
         print "Adding ctznOSX User"
-        add_user_script = """dscl . -create /Users/_ctznosx
+        add_user_script = """
+dscl . -create /Users/_ctznosx
 dscl . -create /Users/_ctznosx RealName "ctznOSX Management User"
 dscl . -create /Users/_ctznosx UniqueID 403  # Use something between 100 and 500 to hide the user
 dscl . -create /Users/_ctznosx PrimaryGroupID 20
@@ -61,9 +62,10 @@ setup(
                 ('/var/lib/ctznosx/', ['README.md', 'ctznosx.db']), 
                 ('/var/lib/ctznosx/monitors/', ['monitors/README.md']), 
                 ('/var/lib/ctznosx/logs/', []),
-                 ('/var/lib/ctznosx/reports/', [])
+                ('/var/lib/ctznosx/reports/', [])
                ],
-    package_data={'ctznosx': ['data/*/*']},
+    package_data={'': ['ctznosx.db', 'ctznosx.conf', 'README.md']},
+    include_package_data=True,
     scripts=['scripts/ctznosx', 'scripts/ctznosx-watcher'],
     install_requires=install_requires,
     classifiers=[

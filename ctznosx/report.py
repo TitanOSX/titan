@@ -211,11 +211,17 @@ def run():
     # Starts block-hide
     report += "<div class=\"block-hide\">"
 
+    if all_monitors is None:
+        monitor_count = 0
+        all_monitors = []
+    else:
+        monitor_count = len(all_monitors)
+
     """ Use for Dashboard view """
     report += "<div class=\"block\" id=\"dashboard\">"
     report += " <h1 class=\"page-header\">Dashboard</h1>\n"
     report += " <div class=\"block-details\">"
-    report += "    <p>There are currently %d monitors configured</p>" % len(all_monitors)
+    report += "    <p>There are currently %d monitors configured</p>" % monitor_count
     report += " </div>"
     report += "</div>"
 
