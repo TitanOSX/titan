@@ -2,7 +2,7 @@ import tempfile
 import commands
 from time import sleep
 from os import listdir,walk,path,environ,unlink
-from config import TiConfig as ctznConfig
+from config import ctznConfig
 from titantools.orm import TiORM as ctznORM
 
 # Get ctznOSX Env and Config

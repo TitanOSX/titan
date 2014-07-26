@@ -2,6 +2,6 @@
 from ctznosx import watcher
 
 try:
-    watcher.main()
+    watcher.run()
 except KeyboardInterrupt:
     pass

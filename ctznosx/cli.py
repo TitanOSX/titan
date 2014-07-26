@@ -9,7 +9,7 @@ from ctznosx import report as Report
 from ctznosx.exceptions import Error
 from ctznosx.usage import *
 from ctznosx import launcher
-from config import TiConfig as ctznConfig
+from config import ctznConfig
 
 # Get ctznOSX Env and Config
 CTZNOSX_PATH = (environ.get('CTZNOSX_PATH') or '/var/lib/ctznosx/')

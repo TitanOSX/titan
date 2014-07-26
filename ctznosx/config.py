@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 """
-This is the config for Titan
+This is the config for ctznOSX
 """
 import ConfigParser, inspect
 from os.path import dirname,abspath,join,isfile
 from sys import argv,exit
 
-# Titan Configuration
-def TiConfig( config_file, ctznosxpath ):
+# ctznOSX Configuration
+def ctznConfig( config_file, ctznosxpath ):
 
     # Default Configuration
     config = {
