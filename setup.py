@@ -39,6 +39,8 @@ dseditgroup -o edit -a _ctznosx -t user wheel"""
         shell_out("chgrp -R wheel /var/lib/ctznosx")
         shell_out("chmod -R 0633 /var/lib/ctznosx/logs")
         shell_out("chmod -R 0666 /var/lib/ctznosx/ctznosx.db")
+        shell_out("sudo launchctl load /Library/LaunchDaemons/plist/com.ctznosx.runner.plist")
+        shell_out("sudo launchctl load /Library/LaunchDaemons/plist/com.ctznosx.watcher.plist")
 
     """ Runtime hooks """
     def run(self):
@@ -62,6 +64,7 @@ setup(
                 ('/var/lib/ctznosx/', ['README.md', 'ctznosx.db']), 
                 ('/var/lib/ctznosx/monitors/', ['monitors/README.md']), 
                 ('/var/lib/ctznosx/logs/', []),
+                ('/Library/LaunchDaemons/', ['plist/com.ctznosx.runner.plist', 'plist/com.ctznosx.watcher.plist']),
                 ('/var/lib/ctznosx/reports/', [])
                ],
     package_data={'': ['ctznosx.db', 'ctznosx.conf', 'README.md']},

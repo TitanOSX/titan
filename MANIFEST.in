@@ -1,2 +1,3 @@
 include ctznosx.conf README.md
 graft monitors
+graft plist
