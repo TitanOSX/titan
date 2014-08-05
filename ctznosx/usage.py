@@ -23,6 +23,7 @@ HELP = _("""
 
 commands:
   run                invoke the scanner
+  device             manage device
   monitor            manage monitors
   report             display report
 
@@ -39,4 +40,12 @@ commands:
   install            installs specified monitor
   upgrade            upgrades specified monitor
   remove             removes specified monitor
+""")
+
+
+MANAGER_USAGE = _("""
+Usage: ctznosx manager [ register ]
+
+commands:
+  register           register this device with a remote server
 """)

@@ -4,7 +4,7 @@ import argparse
 import locale
 import sys
 from os import listdir,walk,path,environ
-from ctznosx import __version__, monitors as Monitors
+from ctznosx import __version__, monitors as Monitors, devicemgmt as Manager
 from ctznosx import report as Report
 from ctznosx.exceptions import Error
 from ctznosx.usage import *
@@ -46,6 +46,14 @@ def monitor(args):
         print MONITOR_USAGE
         sys.exit(1)
 
+# Handles monitor sub-commands
+def manager(args):
+    if args[1] in ('register'):
+        getattr(Manager, args[1])(args[2:])
+    else:
+        print MANAGER_USAGE
+        sys.exit(1)
+
 # Handles clean sub-commands
 def clean(args):
     print args
@@ -85,6 +93,10 @@ def main(argv=None):
         # If this is a plugin install/remove
         if args.command in ('monitor'):
             monitor(argv)
+
+        # If this is a manager based command
+        elif args.command in ('manager'):
+            manager(args)
 
         # Clean subcommand
         elif args.command in ('clean'):
