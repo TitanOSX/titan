@@ -38,7 +38,7 @@ def regiter_device():
     data["os_version"] = software["os_version"]
     data["os_build"] = software["os_build"]
 
-    code, resp = send_request('http://localhost:8000/connect/%s' % data["serial"], data)
+    code, resp = send_request(CONIFG["reporting"]["target"],'/connect/%s' % data["serial"], data)
     
     if code == 0:
         print PREFIX, "Unable To Communicate With Registration Server"
