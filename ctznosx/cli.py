@@ -104,7 +104,7 @@ def main(argv=None):
 
         # Report subcommand
         elif args.command in ('report'):
-            Report.run()
+            Report.run(argv)
 
         # Generic Run Script
         else:

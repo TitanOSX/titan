@@ -13,6 +13,10 @@ CTZNOSX_CONFIG = path.join('/etc/', 'ctznosx.conf')
 CONFIG = ctznConfig( CTZNOSX_CONFIG, CTZNOSX_PATH )
 DATASTORE = CONFIG['main']['datastore']
 
+# Set verbose mode
+verbose = False
+PREFIX = "[ ctznOSX Report Gen ]"
+
 def header():
     return unicode("""
 <html>
@@ -198,12 +202,21 @@ def footer():
     return text
     
 # Run Report
-def run():
+def run(argv):
+    if argv[1] == '--verbose':
+        verbose = True
+
     report = header()
     module_sidebar = ""
+    
+    if verbose:
+        print PREFIX,"Accessing Datastore"
 
     # Load ORM 
     ORM = ctznORM(DATASTORE)
+
+    if verbose:
+        print PREFIX,"Query All Tables"
 
     # Get all tables
     all_monitors = ORM.select('sqlite_master', 'name',  "type = 'table' and name != 'watcher'")
@@ -225,8 +238,13 @@ def run():
     report += " </div>"
     report += "</div>"
 
+    if verbose:
+        print PREFIX,"Looping through Monitors"
+
     """ Start looping through monitors """
     for monitor in all_monitors:
+        if verbose:
+            print PREFIX,"Accessing Monitor %s" % monitor['name']
 
         module_sidebar += "<li><a class=\"nav_monitor\" name=\"%s\" href=\"#\">%s</a></li>" % (monitor['name'],monitor['name'].replace("_", " "))
 
@@ -238,10 +256,16 @@ def run():
         report += " <div class=\"block-details\">"
 
         if module_data is None:
+            if verbose:
+                print PREFIX,"Found no rows"
+
             report += "     <p>We found <b>0</b> rows</p>"
             report += " </div>"
             report += "</div>"
             continue            
+        else:
+            if verbose:
+                print PREFIX,"Found %d rows" % len(module_data)
 
         report += "     <p>We found <b>%d</b> rows</p>" % len(module_data)
         report += " </div>"
