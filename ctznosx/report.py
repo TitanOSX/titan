@@ -203,8 +203,11 @@ def footer():
     
 # Run Report
 def run(argv):
-    if argv[1] == '--verbose':
-        verbose = True
+    try:
+        if argv[1] == '--verbose':
+            verbose = True
+    except IndexError:
+        verbose = False
 
     report = header()
     module_sidebar = ""
