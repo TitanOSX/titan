@@ -7,6 +7,7 @@
 import sys
 import logging
 import hashlib
+from ctznosx import __version__ as version
 from sys import exit
 import urllib2, urllib, httplib, json
 from os import path,walk,remove,environ
@@ -28,9 +29,11 @@ CONFIG = ctznConfig( CTZNOSX_CONFIG, CTZNOSX_PATH )
 # Set datastore
 DATASTORE = CONFIG['main']['datastore']
 
-
 # Load ORM 
 ORM = ctznORM(DATASTORE)
+
+# Set device id
+DEVICEID = get_device_serial()
 
 # Load default schema
 ORM.initialize_table('watcher', {u'date': {u'nullable': False, u'type': u'text'}, 
@@ -38,11 +41,9 @@ ORM.initialize_table('watcher', {u'date': {u'nullable': False, u'type': u'text'}
                 u'module': {u'type': u'text'}, 
                 u'status': {u'type': u'integer'}})
 
-# Device Serial
-DEVICEID = shell_out("ioreg -c IOPlatformExpertDevice |head -30 |grep IOPlatformSerialNumber | awk '{print $4}'")[1:-2]
-
 # Get reporting target
-REPORTING_TARGET = CONFIG['reporting']['target']
+REPORTING_TARGET = "%s%s" % (CONFIG['reporting']['target'], "observer")
+
 if REPORTING_TARGET is None or REPORTING_TARGET == "":
   print "[!] No place to report to"
   exit()
@@ -105,6 +106,7 @@ def generate_reports():
     logging.info("\tSending request to '%s'" % target)
     code, response = send_request(target, {'serial': DEVICEID, 'digest': content_digest, 'stream': compressed})
     logging.info("\tResponse: [%d]" % (code))
+    logging.info("\tResponse: [%s]" % (response.read()))
 
     if code == 202:
       passes_had += 1
@@ -121,18 +123,13 @@ def send_request( target, data):
 
   try:
     request = urllib2.Request(target, urllib.urlencode(data) )
+    request.add_header("User-Agent", "ctznOSX %s" % version)
     opener = urllib2.build_opener()
     response = opener.open(request)
     response_object = response.getcode(), response
 
   except urllib2.HTTPError, e:
-    if e.code == 307:
-      for line in str(e.headers).splitlines():
-        if "Location" in line:
-          new_target = line.split(": ", 1)[1]
-          response_object = send_request( new_target, data )
-    else:
-      response_object = e.code, e.read()
+    response_object = e.code, e.read()
 
   except urllib2.URLError, e:
     response_object = 0, 'Connection Refused'
