@@ -24,7 +24,8 @@ hardware = s.hw_details()
 PREFIX = "[ Manager::Register ] "
 
 """ register """
-def regiter_device():
+def register_device():
+
     print PREFIX, "Attempting to register device with remote server"
     data = {}
 
@@ -38,11 +39,15 @@ def regiter_device():
     data["os_version"] = software["os_version"]
     data["os_build"] = software["os_build"]
 
-    code, resp = send_request(CONIFG["reporting"]["target"],'/connect/%s' % data["serial"], data)
+    code, resp = send_request("%s/connect/%s" % (CONFIG["reporting"]["target"], data["serial"]), data)
     
     if code == 0:
         print PREFIX, "Unable To Communicate With Registration Server"
         return False
+    
+    elif code == 304:
+        print PREFIX, "Device already registered"
+        return True
 
     elif code == 200:
         print PREFIX, "Device Registered Successfully"

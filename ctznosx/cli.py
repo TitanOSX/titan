@@ -40,21 +40,23 @@ def argument_parser(*args, **kwargs):
 
 # Handles monitor sub-commands
 def monitor(args):
-    if 1 in args:
-       if args[1] in ('list', 'install', 'remove', 'upgrade'):
-            getattr(Monitors, args[1])(args[2:])
-    else:
+    if args is None:
         print MONITOR_USAGE
         sys.exit(1)
+    else:
+        if args[1] in ('list', 'install', 'remove', 'upgrade'):
+            getattr(Monitors, args[1])(args[2:])
+        
 
 # Handles monitor sub-commands
 def manager(args):
-    if 1 in args:
-        if args[1] in ('register'):
-            getattr(Manager, args[1])(args[2:])
-    else:
+    if args is None:
         print MANAGER_USAGE
-        sys.exit(1)
+        sys.exit(1)        
+    else:
+        if args[1] in ('register'):
+            Manager.register_device()      
+        
 
 # Handles clean sub-commands
 def clean(args):
