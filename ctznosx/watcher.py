@@ -89,11 +89,11 @@ def generate_reports():
       results = ORM.select(table['name'], '*', 'unixtime > %d' % temp_utime)
 
     if results is None or len(results) == 0:
-      ORM.raw_sql("UPDATE watcher SET status=0, utime = '%d' WHERE module = '%s'" % (temp_utime, table['name']))
+      ORM.raw_sql("UPDATE watcher SET status=0, utime = '%d' WHERE module = '%s'" % (unix_time, table['name']))
       continue
 
     # Dump table to json
-    table_json = json.dumps(results)
+    table_json = json.dumps({"module": table['name'], "data": results})
 
     # Compress the data
     compressed = compress(table_json)
@@ -105,16 +105,18 @@ def generate_reports():
     target = "%s/%s" % (REPORTING_TARGET, DEVICEID)
     logging.info("\tSending request to '%s'" % target)
     code, response = send_request(target, {'serial': DEVICEID, 'digest': content_digest, 'stream': compressed})
-    logging.info("\tResponse: [%d]" % (code))
-    logging.info("\tResponse: [%s]" % (response.read()))
+    try:
+      logging.info("\tResponse: [%d] @ '%s'" % (code, (response.read())))
+    except:
+      logging.info("\tResponse: [%d] @ '%s'" % (code, (response)))
+
 
     if code == 202:
       passes_had += 1
-      ORM.raw_sql("UPDATE watcher SET status=1, utime = %d WHERE module = '%s'" % (temp_utime, table['name']))
+      ORM.raw_sql("UPDATE watcher SET status=1, utime = %d WHERE module = '%s'" % (unix_time, table['name']))
     else:
       ORM.raw_sql("UPDATE watcher SET status=0, utime = %d WHERE module = '%s'" % (temp_utime, table['name']))
 
-  print ORM.select('watcher')
   exit()
 
 
@@ -143,19 +145,20 @@ def run():
   # Check if internet is available
   try_count = 0
 
-  # Testing
-  generate_reports()
-  exit()
-  # End testing
-
   while True:
 
     try:
-      is_connected = urllib2.urlopen( REPORTING_TARGET )
+      target = "%s/%s" % (REPORTING_TARGET, DEVICEID)
+      logging.info("\Checking connectivity to: '%s'" % target)
+      code, response = send_request(target, {'serial': DEVICEID, 'ping': 'ping'})
+    except:
+      pass
 
-    except urllib2.URLError:
-
-      # Seconds for timeout
+    if code == 203:
+      logging.info("Watcher detected a connection")
+      generate_reports()
+    else:
+       # Seconds for timeout
       seconds = 3**try_count
       
       # Exceeded max timeout
@@ -166,11 +169,7 @@ def run():
       logging.info("Watcher did not detect a connection, retrying in %d seconds" % seconds)
 
       # Sleep
-      sleep(seconds)
-
-    else:
-      logging.info("Watcher detected a connection")
-      generate_reports()
+      sleep(seconds)     
 
 if __name__ == "__main__":
   run()
