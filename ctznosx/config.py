@@ -21,7 +21,7 @@ def ctznConfig( config_file, ctznosxpath ):
         'reporting': {
             'type': 'http', 
             'enabled': False, # True or False 
-            'target': 'http://localhost:9393/ctznOSX'
+            'target': ''
             }, 
         'watcher': {
             'enabled': 'true',
