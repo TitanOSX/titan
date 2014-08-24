@@ -39,8 +39,8 @@ dseditgroup -o edit -a _ctznosx -t user wheel"""
         shell_out("chgrp -R wheel /var/lib/ctznosx")
         shell_out("chmod -R 0633 /var/lib/ctznosx/logs")
         shell_out("chmod -R 0666 /var/lib/ctznosx/ctznosx.db")
-        shell_out("sudo launchctl load /Library/LaunchDaemons/plist/com.ctznosx.runner.plist")
-        shell_out("sudo launchctl load /Library/LaunchDaemons/plist/com.ctznosx.watcher.plist")
+        shell_out("sudo launchctl load /Library/LaunchDaemons/com.ctznosx.runner.plist")
+        shell_out("sudo launchctl load /Library/LaunchDaemons/com.ctznosx.watcher.plist")
 
     """ Runtime hooks """
     def run(self):
