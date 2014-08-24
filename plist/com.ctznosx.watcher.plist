@@ -6,6 +6,8 @@
     <false/>
   <key>Label</key>
     <string>com.titan.watcher</string>
+  <key>StandardOutPath</key>
+    <string>/var/log/ctznosx-watcher.log</string>    
   <key>ProgramArguments</key>
     <array>
       <string>/usr/local/bin/ctznosx-watcher</string>

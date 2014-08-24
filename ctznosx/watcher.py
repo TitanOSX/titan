@@ -35,6 +35,9 @@ ORM = ctznORM(DATASTORE)
 # Set device id
 DEVICEID = get_device_serial()
 
+# Create Run Prefix
+RUN_PREFIX = "[%s] " % strftime("%a, %d %b %Y %H:%M:%S-%Z", gmtime())
+
 # Load default schema
 ORM.initialize_table('watcher', {u'date': {u'nullable': False, u'type': u'text'}, 
                 u'utime': {u'type': u'integer'}, 
@@ -80,12 +83,12 @@ def generate_reports():
       # Logging is cool
       temp_utime = unix_time
       ORM.raw_sql("INSERT INTO watcher (date,status,utime,module) VALUES ('%s', 0,'%s', '%s')" % (exec_time, temp_utime, table['name']))
-      logging.info("Collecting data for [%s] since ever" % (table['name']))
+      logging.info("%sCollecting data for [%s] since ever" % (RUN_PREFIX,table['name']))
       results = ORM.select(table['name'], '*')
     else:
       # Logging is cool
       temp_utime = int(last_success[0][4])
-      logging.info("Collecting data for [%s] since %s" % (table['name'],last_success[0][1]))
+      logging.info("%sCollecting data for [%s] since %s" % (RUN_PREFIX,table['name'],last_success[0][1]))
       results = ORM.select(table['name'], '*', 'unixtime > %d' % temp_utime)
 
     if results is None or len(results) == 0:
@@ -149,13 +152,13 @@ def run():
 
     try:
       target = "%s/%s" % (REPORTING_TARGET, DEVICEID)
-      logging.info("\Checking connectivity to: '%s'" % target)
+      logging.info("%sChecking connectivity to: '%s'" % (RUN_PREFIX,target))
       code, response = send_request(target, {'serial': DEVICEID, 'ping': 'ping'})
     except:
       pass
 
     if code == 203:
-      logging.info("Watcher detected a connection")
+      logging.info("%sWatcher detected a connection " % RUN_PREFIX)
       generate_reports()
     else:
        # Seconds for timeout
@@ -166,7 +169,7 @@ def run():
         exit()
 
       try_count += 1
-      logging.info("Watcher did not detect a connection, retrying in %d seconds" % seconds)
+      logging.info("%sWatcher did not detect a connection, retrying in %d seconds" % (RUN_PREFIX,seconds))
 
       # Sleep
       sleep(seconds)     
