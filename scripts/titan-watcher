@@ -1,0 +1,7 @@
+#!/usr/bin/python
+from titan import watcher
+
+try:
+    watcher.run()
+except KeyboardInterrupt:
+    pass

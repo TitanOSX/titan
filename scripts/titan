@@ -1,0 +1,7 @@
+#!/usr/bin/python
+from titan import cli
+
+try:
+    cli.main()
+except KeyboardInterrupt:
+    pass
