@@ -9,7 +9,7 @@ from zlib import compress
 from config import titanConfig
 from binascii import b2a_hex,hexlify
 from os import path,walk,remove,environ
-from titanosx import __version__ as version
+from titan import __version__ as version
 from titantools.orm import TiORM as ctznORM
 from time import sleep,strftime,strptime,gmtime,mktime
 from titantools.system import shell_out,hw_serial as get_device_serial
@@ -17,7 +17,7 @@ from os.path import dirname, realpath, isfile, join, splitext, basename
 
 # Get titanOSX Env and Config
 TITAN_PATH = (environ.get('TITAN_PATH') or '/var/lib/titanosx/')
-TITAN_CONFIG = join('/etc/', 'titanosx.conf')
+TITAN_CONFIG = join('/etc/', 'titan.conf')
 
 # Config
 CONFIG = titanConfig( TITAN_CONFIG, TITAN_PATH )

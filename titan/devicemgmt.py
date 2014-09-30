@@ -4,14 +4,14 @@ import datetime
 from os import environ
 from sys import exit
 from os.path import join
-from titanosx import __version__ as version
+from titan import __version__ as version, http
 from titantools import system as s
 import urllib2, urllib, httplib, json
 from config import titanConfig
 
 # Get titanOSX Env and Config
-TITAN_PATH = (environ.get('TITANOSX_PATH') or '/var/lib/titanosx/')
-TITAN_CONFIG = join('/etc/', 'titanosx.conf')
+TITAN_PATH = (environ.get('TITAN_CONFIG_PATH') or '/var/lib/titanosx/')
+TITAN_CONFIG = join('/etc/', 'titan.conf')
 
 # Config
 CONFIG = titanConfig( TITAN_CONFIG, TITAN_PATH )
@@ -26,11 +26,16 @@ PREFIX = "[ Manager::Register ] "
 # Reporting Token
 TOKEN = {'token': CONFIG['reporting']['token']}
 
-""" register """
-def register_device():
+""" check status """
+def status():
+    print PREFIX, "Checking status for remote server"
+    code, resp = http.request("%s/status/%s" % (CONFIG["reporting"]["target"], data["serial"]))
+    print resp
 
+""" register """
+def register():
     print PREFIX, "Attempting to register device with remote server"
-    
+
     # Create empty data objects
     data = {}
 
@@ -44,7 +49,8 @@ def register_device():
     data["os_version"] = software["os_version"]
     data["os_build"] = software["os_build"]
 
-    code, resp = send_request("%s/connect/%s" % (CONFIG["reporting"]["target"], data["serial"]), data)
+    # Check status first, autoredirect to register
+    code, resp = send_request("%s/status/%s" % (CONFIG["reporting"]["target"], data["serial"]), data)
     
     if code == 0:
         print PREFIX, "Unable To Communicate With Registration Server"
@@ -64,25 +70,4 @@ def register_device():
 
 
 def send_request( target, data):
-    try:
-        request = urllib2.Request(target, urllib.urlencode(data) )
-        request.add_header("User-Agent", "titanOSX %s" % version)
-        opener = urllib2.build_opener()
-        response = opener.open(request)
-        response_object = response.getcode(), response
-
-    except urllib2.HTTPError, e:
-        if e.code == 307:
-            print PREFIX, "This device needs to be registered"
-            for line in str(e.headers).splitlines():
-                if "Location" in line:
-                    new_target = line.split(": ", 1)[1]
-                    response_object = send_request( new_target, data )
-        else:
-            response_object = e.code, e.read()
-
-    except urllib2.URLError, e:
-        response_object = 0, 'Connection Refused'
-
-
-    return response_object
+    return http.request(target, data)

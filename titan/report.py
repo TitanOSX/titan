@@ -7,7 +7,7 @@ from titantools.orm import TiORM as ctznORM
 
 # Get titanOSX Env and Config
 TITAN_PATH = (environ.get('TITAN_PATH') or '/var/lib/titanosx/')
-TITAN_CONFIG = path.join('/etc/', 'titanosx.conf')
+TITAN_CONFIG = join('/etc/', 'titan.conf')
 
 # Config
 CONFIG = titanConfig( TITAN_CONFIG, TITAN_PATH )

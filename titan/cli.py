@@ -4,16 +4,16 @@ import argparse
 import locale
 import sys
 from os import listdir,walk,path,environ
-from titanosx import __version__, monitors as Monitors, devicemgmt as Manager
-from titanosx import report as Report
-from titanosx.exceptions import Error
-from titanosx.usage import *
-from titanosx import launcher
+from titan import __version__, monitors as Monitors, devicemgmt as Manager
+from titan import report as Report
+from titan.exceptions import Error
+from titan.usage import *
+from titan import launcher
 from config import titanConfig
 
 # Get titanOSX Env and Config
 TITAN_PATH = (environ.get('TITAN_PATH') or '/var/lib/titanosx/')
-TITAN_CONFIG = path.join('/etc/', 'titanosx.conf')
+TITAN_CONFIG = join('/etc/', 'titan.conf')
 
 # Config
 CONFIG = titanConfig( TITAN_CONFIG, TITAN_PATH )
@@ -46,7 +46,7 @@ def monitor(args):
     else:
         if args[1] in ('list', 'install', 'remove', 'upgrade'):
             getattr(Monitors, args[1])(args[2:])
-        
+
 
 # Handles monitor sub-commands
 def manager(args):
@@ -54,9 +54,9 @@ def manager(args):
         print MANAGER_USAGE
         sys.exit(1)        
     else:
-        if args[1] in ('register'):
-            Manager.register_device()      
-        
+        if args[1] in ('register', 'status'):
+            getattr(Manager, args[1])(args[2:])
+
 
 # Handles clean sub-commands
 def clean(args):
