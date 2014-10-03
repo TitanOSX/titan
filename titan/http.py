@@ -32,6 +32,11 @@ def request(url, data=None, type=None):
       else:
         getattr(type)(*args, **kwargs)
 
+
+    if r.status_code == 402:
+        print ":: API TOKEN REQUIRED"
+        exit()
+
     return r.status_code, r.content
 
   except requests.exceptions.ConnectionError, e:
