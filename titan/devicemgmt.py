@@ -51,6 +51,27 @@ def status():
     else:
         print PREFIX, "Device is not registered"
 
+""" check status """
+def unregister():
+    # Log Prefix
+    PREFIX = "[ Manager::Unregister ] "
+    print PREFIX, "Checking status for remote server"
+    
+    code, resp = http.request("%s/api/unregister/%s" % (CONFIG["reporting"]["target"], data["serial"]), type='delete')
+
+    if code == 0:
+        print PREFIX, "Unable To Communicate With Registration Server"
+        return False
+    
+    elif code == 410:
+        print PREFIX, "Unregistered Successfully"
+    
+    elif code == 404:
+        print PREFIX, "Device not registered"
+
+    else:
+        print PREFIX, "Error"
+
 
 """
 Proposed work flow:
