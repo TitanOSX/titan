@@ -30,10 +30,10 @@ def request(url, data=None, type=None):
       if type is None:
         r = get(url)
       else:
-        getattr(type)(*args, **kwargs)
+        r = globals()[type](url)
 
 
-    if r.status_code == 402:
+    if r is not None and r.status_code == 402:
         print ":: API TOKEN REQUIRED"
         exit()
 
@@ -54,8 +54,10 @@ def get(url):
     r = requests.get(url, headers=HEADERS)
     return r
 
-def put():
-    pass
+def put(url):
+    r = requests.put(url, headers=HEADERS)
+    return r
 
-def delete():
-    pass
+def delete(url):
+    r = requests.delete(url, headers=HEADERS)
+    return r
