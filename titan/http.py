@@ -19,12 +19,14 @@ def request(url, data=None, type=None):
       else:
         getattr(type)(*args, **kwargs)
 
+    return r.status_code, r.content
+
   except requests.exceptions.ConnectionError, e:
     return 0, "A connection could not be established"
   except requests.exceptions.HTTPError, e:
-    return e
+    return e.status, e.message
   except requests.exceptions.RequestException, e:
-    pass
+    return e.status, e.message
 
 def post(url, data=None):
     r = requests.post(url, data=data, headers=HEADERS)
@@ -39,20 +41,3 @@ def put():
 
 def delete():
     pass
-
-# Send the request
-def check_connectivity( target ):
-  try:
-    request = urllib2.Request( target )
-    request.add_header("User-Agent", "titanOSX %s" % version)
-    opener = urllib2.build_opener()
-    response = opener.open(request, timeout = 1)
-    response_object = response.getcode(), response
-    logging.info(response_object)
-  except urllib2.HTTPError, e:
-    response_object = e.code, e.read()
-
-  except urllib2.URLError, e:
-    response_object = 0, 'Connection Refused'
-
-  return response_object
