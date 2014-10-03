@@ -2,10 +2,23 @@ import json
 import hashlib
 import requests
 
+from os import environ
+from os.path import join
 from titan import __version__ as version
+from config import titanConfig
+
+# Get titanOSX Env and Config
+TITAN_PATH = (environ.get('TITAN_CONFIG_PATH') or '/var/lib/titan/')
+TITAN_CONFIG = join('/etc/', 'titan.conf')
+
+# Config
+CONFIG = titanConfig( TITAN_CONFIG, TITAN_PATH )
 
 # Set titanOSX headers
-HEADERS = { 'User-Agent': "titanOSX %s" % version }
+HEADERS = { 
+            "User-Agent": "titanOSX %s" % version, 
+            "X-Titan-Token": CONFIG['reporting']['token'] 
+          }
 
 def request(url, data=None, type=None):
   r = None
