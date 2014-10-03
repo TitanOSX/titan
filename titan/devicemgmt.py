@@ -35,8 +35,12 @@ def status():
     print PREFIX, "Checking status for remote server"
     
     code, resp = http.request("%s/api/status/%s" % (CONFIG["reporting"]["target"], data["serial"]))
-
-    if code == 200:
+    
+    if code == 0:
+        print PREFIX, "Unable To Communicate With Registration Server"
+        return False
+    
+    elif code == 200:
         print PREFIX, "Device is registered with", CONFIG["reporting"]["target"]
         device = json.loads(resp)
         print ""
