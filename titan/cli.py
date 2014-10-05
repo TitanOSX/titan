@@ -41,7 +41,7 @@ def argument_parser(*args, **kwargs):
 
 # Handles monitor sub-commands
 def monitor(args):
-    if args is None:
+    if args is None or len(args) == 1:
         print MONITOR_USAGE
         sys.exit(1)
     else:
@@ -53,10 +53,11 @@ def monitor(args):
 
 # Handles monitor sub-commands
 def manager(args):
-    if args is None:
+    if args is None or len(args) == 1:
         print MANAGER_USAGE
         sys.exit(1)        
     else:
+        print args
         if args[1] in ('register', 'unregister', 'status'):
             getattr(Manager, args[1])(args[2:])
         else:
