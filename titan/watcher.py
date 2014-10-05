@@ -1,16 +1,18 @@
 #!/usr/bin/env python
 
 import sys
-import http
+import json
 import logging
+import hashlib
+import urllib2,urllib
 
 from sys import exit
 from zlib import compress
 from config import titanConfig
 from binascii import b2a_hex,hexlify
 from os import path,walk,remove,environ
-from titan import __version__ as version
-from titantools.orm import TiORM as ctznORM
+from titan import __version__ as version, http
+from titantools.orm import TiORM as titanORM
 from time import sleep,strftime,strptime,gmtime,mktime
 from titantools.system import shell_out,hw_serial as get_device_serial
 from os.path import dirname, realpath, isfile, join, splitext, basename
@@ -26,7 +28,7 @@ CONFIG = titanConfig( TITAN_CONFIG, TITAN_PATH )
 DATASTORE = CONFIG['main']['datastore']
 
 # Load ORM 
-ORM = ctznORM(DATASTORE)
+ORM = titanORM(DATASTORE)
 
 # Set device id
 DEVICEID = get_device_serial()
@@ -49,7 +51,7 @@ if CONFIG['reporting']['target'] is None or CONFIG['reporting']['target'] == "":
   exit()
 
 # Get reporting tarsget
-REPORTING_TARGET = "%s%s" % (CONFIG['reporting']['target'], "observer")
+REPORTING_TARGET = "%s%s%s" % (CONFIG['reporting']['target'], "api/observer/", DEVICEID)
 
 # Check if Watcher is enabled
 if CONFIG['watcher']['enabled'] is "false":
@@ -75,10 +77,10 @@ def generate_reports():
   # Loop through tables
   for table in [table for table in all_tables]:
     # Last success
-    last_success = ORM.raw_sql('SELECT * FROM watcher WHERE module="%s" ORDER BY date DESC LIMIT 1' % (table['name']))
-
+    last_success = ORM.raw_sql('SELECT * FROM watcher WHERE module="%s" AND status=1 ORDER BY date DESC LIMIT 1' % (table['name']))
+    
     # Get table data
-    if len(last_success[0]) is 0:
+    if len(last_success) is 0:
       # Logging is cool
       temp_utime = unix_time
       ORM.raw_sql("INSERT INTO watcher (date,status,utime,module) VALUES ('%s', 0,'%s', '%s')" % (exec_time, temp_utime, table['name']))
@@ -90,7 +92,12 @@ def generate_reports():
       logging.info("%sCollecting data for [%s] since %s" % (RUN_PREFIX,table['name'],last_success[0][1]))
       results = ORM.select(table['name'], '*', 'unixtime > %d' % temp_utime)
 
-    if results is None or len(results) == 0:
+    if results is None:
+      ORM.raw_sql("UPDATE watcher SET status=0, utime = '%d' WHERE module = '%s'" % (unix_time, table['name']))
+      continue
+    elif len(results) > 0:
+      pass
+    else:
       ORM.raw_sql("UPDATE watcher SET status=0, utime = '%d' WHERE module = '%s'" % (unix_time, table['name']))
       continue
 
@@ -104,11 +111,10 @@ def generate_reports():
     content_digest = hashlib.sha256(compressed).hexdigest()
 
     # Send the table data upstream
-    target = "%s/%s" % (REPORTING_TARGET, DEVICEID)
-    logging.info("\tSending request to '%s'" % target)
-    http.post(target, {'serial': DEVICEID, 'digest': content_digest, 'stream': compressed})
+    logging.info("\tSending request to '%s'" % REPORTING_TARGET)
+    code, response = http.request(REPORTING_TARGET, {'serial': DEVICEID, 'digest': content_digest, 'stream': compressed})
     try:
-      logging.info("\tResponse: [%d] @ '%s'" % (code, (response.read())))
+      logging.info("\tResponse: [%d] @ '%s'" % (code, (response)))
     except:
       logging.info("\tResponse: [%d] @ '%s'" % (code, (response)))
 
@@ -121,6 +127,24 @@ def generate_reports():
 
   exit()
 
+# Send the request
+def test_waters( target ):
+
+  try:
+    request = urllib2.Request(target)
+    opener = urllib2.build_opener()
+    opener.addheaders = [('User-agent', "titanOSX %s" % version), 
+                        ("X-Titan-Token", CONFIG['reporting']['token'])]
+    response = opener.open(request)
+    response_object = response.getcode(), response
+
+  except urllib2.HTTPError, e:
+    response_object = e.code, e.read()
+
+  except urllib2.URLError, e:
+    response_object = 0, 'Connection Refused'
+
+  return response_object
 
 # Run the meat and potatoes
 def run():
@@ -132,12 +156,7 @@ def run():
   while True:
 
     # Check connectivity
-    try:
-      target = "%s/%s" % (REPORTING_TARGET, DEVICEID)
-      logging.info("%sChecking connectivity to: '%s'" % (RUN_PREFIX,target))
-      code, response = http.check_connectivity(target)
-    except:
-      pass
+    code, res = test_waters(REPORTING_TARGET)
 
     # If CDM returns a 203, send up the reports
     if code == 203:
