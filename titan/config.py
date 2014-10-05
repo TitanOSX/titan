@@ -13,7 +13,7 @@ def titanConfig( config_file, titanosxpath ):
     config = {
         'main': {
             'debug': False, 
-            'datastore': join(titanosxpath,'titanosx.db'),
+            'datastore': join(titanosxpath,'titan.db'),
             'logstore': join(titanosxpath,'logs'),
             'monitorstore': join(titanosxpath, "monitors"),
             'reportstore': join(titanosxpath, "reports")
