@@ -10,23 +10,29 @@ from titantools import system as s
 import urllib2, urllib, httplib, json
 from config import titanConfig
 
+
 # Get titanOSX Env and Config
 TITAN_PATH = (environ.get('TITAN_PATH') or '/var/lib/titan/')
 TITAN_CONFIG = join('/etc/', 'titan.conf')
 
+
 # Config
 CONFIG = titanConfig( TITAN_CONFIG, TITAN_PATH )
+
 
 # Get Defaults
 software = s.sw_details()
 hardware = s.hw_details()
 
+
 # Reporting Token
 TOKEN = {'token': CONFIG['reporting']['token']}
+
 
 # Create empty data objects
 data = {}
 data["serial"] = hardware["serial_number"]
+
 
 """ check status """
 def status():

@@ -57,9 +57,8 @@ def manager(args):
         print MANAGER_USAGE
         sys.exit(1)        
     else:
-        print args
         if args[1] in ('register', 'unregister', 'status'):
-            getattr(Manager, args[1])(args[2:])
+            getattr(Manager, args[1])
         else:
             print MANAGER_USAGE
             sys.exit(1)
