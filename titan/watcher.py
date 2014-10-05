@@ -162,6 +162,10 @@ def run():
     if code == 203:
       logging.info("%sWatcher detected a connection " % RUN_PREFIX)
       generate_reports()
+
+    elif code == 404:
+      logging.info("%sPlease register this device first " % RUN_PREFIX)
+      exit()
     
     else:
        # Seconds for timeout
