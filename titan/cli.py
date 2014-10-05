@@ -57,7 +57,7 @@ def manager(args):
         print MANAGER_USAGE
         sys.exit(1)        
     else:
-        if args[1] in ('register', 'status'):
+        if args[1] in ('register', 'unregister', 'status'):
             getattr(Manager, args[1])(args[2:])
         else:
             print MANAGER_USAGE
@@ -65,13 +65,13 @@ def manager(args):
 
 # Handles clean sub-commands
 def clean(args):
-    print args
+    pass
+    #print args
 
 def main(argv=None):
     """
     Handle command line arguments.
     """
-
     if argv is None:
         argv = sys.argv[1:]
         encoding = locale.getdefaultlocale()[1]
@@ -116,8 +116,11 @@ def main(argv=None):
             Report.run(argv)
 
         # Generic Run Script
-        else:
+        elif args.command in ('run'):
             launcher.run()
+        else:
+            print USAGE
+            sys.exit(1)
 
     except Error as error:
         message = '%s' % error
