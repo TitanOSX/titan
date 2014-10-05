@@ -11,7 +11,7 @@ HELP = _("""
 
 commands:
   run                invoke the scanner
-  device             manage device
+  manager            manage device
   monitor            manage monitors
   report             display report
 
@@ -66,8 +66,10 @@ commands:
 
 
 MANAGER_USAGE = _("""
-Usage: titanosx manager [ register ]
+Usage: titanosx manager [ status | register | unregister ]
 
 commands:
+  status             return status of remote server
   register           register this device with a remote server
+  unregister         unregister this device with a remote server
 """)
