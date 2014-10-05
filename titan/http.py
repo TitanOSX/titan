@@ -41,23 +41,29 @@ def request(url, data=None, type=None):
 
   except requests.exceptions.ConnectionError, e:
     return 0, "A connection could not be established"
+  
   except requests.exceptions.HTTPError, e:
     return e.status, e.message
+
   except requests.exceptions.RequestException, e:
     return e.status, e.message
 
+""" POST Method """
 def post(url, data=None):
     r = requests.post(url, data=data, headers=HEADERS)
     return r
 
+""" GET Method """
 def get(url):
     r = requests.get(url, headers=HEADERS)
     return r
 
+""" PUT Method """
 def put(url):
     r = requests.put(url, headers=HEADERS)
     return r
 
+""" DELETE Method """
 def delete(url):
     r = requests.delete(url, headers=HEADERS)
     return r
