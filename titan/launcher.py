@@ -16,7 +16,7 @@ from os import listdir,walk,path,environ
 from os.path import dirname, realpath, isfile, join, splitext, basename
 
 # Get titanOSX Env and Config
-TITAN_PATH = (environ.get('TITAN_PATH') or '/var/lib/titanosx/')
+TITAN_PATH = (environ.get('TITAN_PATH') or '/var/lib/titan/')
 TITAN_CONFIG = join('/etc/', 'titan.conf')
 
 # Config

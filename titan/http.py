@@ -8,7 +8,7 @@ from titan import __version__ as version
 from config import titanConfig
 
 # Get titanOSX Env and Config
-TITAN_PATH = (environ.get('TITAN_CONFIG_PATH') or '/var/lib/titan/')
+TITAN_PATH = (environ.get('TITAN_PATH') or '/var/lib/titan/')
 TITAN_CONFIG = join('/etc/', 'titan.conf')
 
 # Config
