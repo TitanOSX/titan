@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 import argparse
 import locale
 import sys
+from os.path import join
 from os import listdir,walk,path,environ
 from titan import __version__, monitors as Monitors, devicemgmt as Manager
 from titan import report as Report
@@ -12,7 +13,7 @@ from titan import launcher
 from config import titanConfig
 
 # Get titanOSX Env and Config
-TITAN_PATH = (environ.get('TITAN_PATH') or '/var/lib/titanosx/')
+TITAN_PATH = (environ.get('TITAN_PATH') or '/var/lib/titan/')
 TITAN_CONFIG = join('/etc/', 'titan.conf')
 
 # Config
