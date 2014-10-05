@@ -47,7 +47,9 @@ def monitor(args):
     else:
         if args[1] in ('list', 'install', 'remove', 'upgrade'):
             getattr(Monitors, args[1])(args[2:])
-
+        else:
+            print MONITOR_USAGE
+            sys.exit(1)
 
 # Handles monitor sub-commands
 def manager(args):
@@ -57,7 +59,9 @@ def manager(args):
     else:
         if args[1] in ('register', 'status'):
             getattr(Manager, args[1])(args[2:])
-
+        else:
+            print MANAGER_USAGE
+            sys.exit(1)
 
 # Handles clean sub-commands
 def clean(args):
