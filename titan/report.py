@@ -4,7 +4,7 @@ from time import sleep
 from os.path import join
 from os import listdir,walk,path,environ,unlink
 from config import titanConfig
-from titantools.orm import TiORM as ctznORM
+from titan.tools.orm import TiORM as ctznORM
 
 # Get titanOSX Env and Config
 TITAN_PATH = (environ.get('TITAN_PATH') or '/var/lib/titan/')

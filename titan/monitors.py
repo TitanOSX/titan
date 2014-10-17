@@ -8,7 +8,7 @@ from glob import glob
 from pwd import getpwuid
 from shutil import rmtree
 from os.path import isdir,join,sep
-from titantools.system import shell_out
+from titan.tools.system import shell_out
 import urllib2, urllib, httplib, json
 from config import titanConfig
 
