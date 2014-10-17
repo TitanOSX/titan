@@ -46,7 +46,7 @@ def request(url, data=None, type=None):
     return e.status, e.message
 
   except requests.exceptions.RequestException, e:
-    return e.status, e.message
+    return 0, e.message
 
 """ POST Method """
 def post(url, data=None):

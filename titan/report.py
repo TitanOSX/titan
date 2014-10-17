@@ -4,7 +4,7 @@ from time import sleep
 from os.path import join
 from os import listdir,walk,path,environ,unlink
 from config import titanConfig
-from titan.tools.orm import TiORM as ctznORM
+from titan.tools.orm import TiORM as titanORM
 
 # Get titanOSX Env and Config
 TITAN_PATH = (environ.get('TITAN_PATH') or '/var/lib/titan/')
@@ -217,7 +217,7 @@ def run(argv):
         print PREFIX,"Accessing Datastore"
 
     # Load ORM 
-    ORM = ctznORM(DATASTORE)
+    ORM = titanORM(DATASTORE)
 
     if verbose:
         print PREFIX,"Query All Tables"

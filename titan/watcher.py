@@ -12,9 +12,9 @@ from config import titanConfig
 from binascii import b2a_hex,hexlify
 from os import path,walk,remove,environ
 from titan import __version__ as version, http
-from titantools.orm import TiORM as titanORM
+from titan.tools.orm import TiORM as titanORM
 from time import sleep,strftime,strptime,gmtime,mktime
-from titantools.system import shell_out,hw_serial as get_device_serial
+from titan.tools.system import shell_out,hw_serial as get_device_serial
 from os.path import dirname, realpath, isfile, join, splitext, basename
 
 # Get titanOSX Env and Config

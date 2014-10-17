@@ -5,8 +5,7 @@ import locale
 import sys
 from os.path import join
 from os import listdir,walk,path,environ
-from titan import __version__, monitors as Monitors, devicemgmt as Manager
-from titan import report as Report
+from titan import __version__, monitors as Monitors, devicemgmt as Manager, report as Report
 from titan.exceptions import Error
 from titan.usage import *
 from titan import launcher
