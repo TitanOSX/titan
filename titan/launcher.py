@@ -7,7 +7,7 @@ import logging
 from sys import argv,exit
 from itertools import chain
 from config import titanConfig
-from titantools.system import hw_serial as get_device_serial
+from titan.tools.system import hw_serial as get_device_serial
 from socket import gethostname
 from time import time, strftime, gmtime
 from collections import namedtuple

@@ -6,7 +6,7 @@ from os import environ
 from sys import exit
 from os.path import join
 from titan import __version__ as version, http
-from titantools import system as s
+from titan.tools import system as s
 import urllib2, urllib, httplib, json
 from config import titanConfig
 
