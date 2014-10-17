@@ -10,7 +10,7 @@ security professionals to profile and record details
 relating to organizational wide Mac deployments.
 """
 
-#install_requires = ['titantools']
+install_requires = ['requests']
 
 if sys.version_info < (2, 7):
     install_requires += ['argparse']
@@ -70,7 +70,7 @@ setup(
     package_data={'': ['titan.db', 'titan.conf', 'README.md']},
     include_package_data=True,
     scripts=['scripts/titan', 'scripts/titan-watcher'],
-#    install_requires=install_requires,
+    install_requires=install_requires,
     classifiers=[
         'Intended Audience :: System Administrators',
         'License :: OSI Approved :: MIT License',
