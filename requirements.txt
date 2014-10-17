@@ -1,3 +1,2 @@
-titantools==0.1.9
 wsgiref==0.1.2
 requests==1.9

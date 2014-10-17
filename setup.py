@@ -2,7 +2,7 @@ import os, sys
 from titan import __version__ as version
 from distutils.core import setup
 from setuptools.command.install import install
-from titantools.system import shell_out
+from titan.tools.system import shell_out
 
 long_description = """
 titanOSX is used by system administrators and
@@ -10,7 +10,7 @@ security professionals to profile and record details
 relating to organizational wide Mac deployments.
 """
 
-install_requires = ['titantools']
+#install_requires = ['titantools']
 
 if sys.version_info < (2, 7):
     install_requires += ['argparse']
@@ -70,7 +70,7 @@ setup(
     package_data={'': ['titan.db', 'titan.conf', 'README.md']},
     include_package_data=True,
     scripts=['scripts/titan', 'scripts/titan-watcher'],
-    install_requires=install_requires,
+#    install_requires=install_requires,
     classifiers=[
         'Intended Audience :: System Administrators',
         'License :: OSI Approved :: MIT License',

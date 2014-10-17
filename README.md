@@ -31,7 +31,7 @@ titanOSX at its core is just a Python script. So installation is pretty simple u
 
 ### From PyPi
 
-    sudo pip install titantools titan
+    sudo pip install titan
 
 Configuration
 -------------
